@@ -1,0 +1,1027 @@
+{
+	"type": "hello"
+}{
+	"url": "wss://mpmulti-d9do.slack-msgs.com/websocket/yDuueVVsKA9zQy5HZp51N64IMfmktqtw1Ukys8vI0UjaZ3QkRnZJbrxfEXgMQqxyBggwhxv4UltO_j8Nlpzsy8JDso8Qx9iMbVJ1Ngb8NYMjyyKh3p7LY7SrBNOsmNZJONe1xX_sQu-e_57pFeT-uTQJ1ptLpvQgFF-i7XEll0E=",
+	"type": "reconnect_url"
+}{
+	"type": "presence_change",
+	"user": "U317LEJ2Y",
+	"presence": "active"
+}{
+	"type": "presence_change",
+	"user": "U317LEJ2Y",
+	"presence": "active"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "yo",
+	"ts": "1478813662.000037",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.7509526016616008,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_1_1470199483860"
+		],
+		"text": [
+			"Hi, I'm the Watson RecipeBot. I know a lot about recipes. How can I help you?"
+		]
+	},
+	"context": {
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"system": {
+			"dialog_turn_counter": 1,
+			"dialog_stack": [
+				"node_1_1470199483860"
+			],
+			"dialog_request_counter": 1
+		}
+	},
+	"input": {
+		"text": "yo"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Hi, I'm the Watson RecipeBot. I know a lot about recipes. How can I help you?\n",
+	"ts": "1478813664.000038",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "I need food",
+	"ts": "1478813670.000039",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.7192299238308539,
+			"intent": "start_cooking"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_2_1470200792636"
+		],
+		"text": [
+			"I can help with that! Are you looking to use specific ingredients?"
+		]
+	},
+	"context": {
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"system": {
+			"dialog_turn_counter": 2,
+			"dialog_stack": [
+				"node_2_1470200792636"
+			],
+			"dialog_request_counter": 2
+		}
+	},
+	"input": {
+		"text": "i need food"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "I can help with that! Are you looking to use specific ingredients?\n",
+	"ts": "1478813672.000040",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "yes",
+	"ts": "1478813674.000041",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 1,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_4_1470201214332"
+		],
+		"text": [
+			"Great, give me the list of ingredients (comma separated).\n\nE.g. onions, tomatoes, cilantro, beef"
+		]
+	},
+	"context": {
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"get_recipes": true,
+		"system": {
+			"dialog_turn_counter": 3,
+			"dialog_stack": [
+				"node_4_1470201214332"
+			],
+			"dialog_request_counter": 3
+		}
+	},
+	"input": {
+		"text": "yes"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Great, give me the list of ingredients (comma separated).\n\nE.g. onions, tomatoes, cilantro, beef\n",
+	"ts": "1478813677.000042",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"url": "wss://mpmulti-yq1i.slack-msgs.com/websocket/ks194NethGuGOxEO01TdL7VOfyrz65fpUtklOV-x0zUzCTj-9okUl_Xv41zCJADCz1mDf4ptA2sMOk0O5EsEmX_N0HjUunVoAW9ntw5VQsLZ5KTtywAnXtkGGHzUPrVEZYZWUfnypyVMj-nF86_5rRAzHApizqJk-piPvD8rhrs=",
+	"type": "reconnect_url"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "salad",
+	"ts": "1478813678.000043",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.7509526016616008,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_5_1470995072447"
+		],
+		"text": [
+			"Here is what I've found..."
+		]
+	},
+	"context": {
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"get_recipes": true,
+		"is_ingredients": true,
+		"system": {
+			"dialog_turn_counter": 4,
+			"dialog_stack": [
+				"node_5_1470995072447"
+			],
+			"dialog_request_counter": 4
+		}
+	},
+	"input": {
+		"text": "salad"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Lets see here...\nI've found these recipes: \n1. Basil Cherry Tomatoes\n2. Spinach Garlic Pasta\n3. The Quick Fix Salad Bar Pizza\n4. Spinaci (Spinach) alla Padella (Frying Pan)\n5. How to Make Kale Chips\n\nPlease enter the corresponding number of your choice.",
+	"ts": "1478813681.000044",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "ok",
+	"ts": "1478813686.000045",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 1,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_21_1471330497996"
+		],
+		"text": [
+			"Enter your selection:"
+		]
+	},
+	"context": {
+		"selection": "ok",
+		"recipes": [
+			{
+				"title": "Basil Cherry Tomatoes",
+				"image": "https://spoonacular.com/recipeImages/Basil-Cherry-Tomatoes-328157.jpg",
+				"missedIngredientCount": 2,
+				"likes": 0,
+				"usedIngredientCount": 1,
+				"id": 328157,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinach Garlic Pasta",
+				"image": "https://spoonacular.com/recipeImages/Spinach-Garlic-Pasta-459549.jpg",
+				"missedIngredientCount": 2,
+				"likes": 30,
+				"usedIngredientCount": 1,
+				"id": 459549,
+				"imageType": "jpg"
+			},
+			{
+				"title": "The Quick Fix Salad Bar Pizza",
+				"image": "https://spoonacular.com/recipeImages/The-Quick-Fix-Salad-Bar-Pizza-591394.jpg",
+				"missedIngredientCount": 2,
+				"likes": 81,
+				"usedIngredientCount": 1,
+				"id": 591394,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinaci (Spinach) alla Padella (Frying Pan)",
+				"image": "https://spoonacular.com/recipeImages/spinaci-spinach-alla-padella-frying-pan-329544.jpeg",
+				"missedIngredientCount": 2,
+				"likes": 1,
+				"usedIngredientCount": 1,
+				"id": 329544,
+				"imageType": "jpeg"
+			},
+			{
+				"title": "How to Make Kale Chips",
+				"image": "https://spoonacular.com/recipeImages/How-to-Make-Kale-Chips-526166.jpg",
+				"missedIngredientCount": 2,
+				"likes": 4,
+				"usedIngredientCount": 1,
+				"id": 526166,
+				"imageType": "jpg"
+			}
+		],
+		"get_recipes": true,
+		"system": {
+			"dialog_turn_counter": 5,
+			"dialog_stack": [
+				"node_21_1471330497996"
+			],
+			"dialog_request_counter": 5
+		},
+		"is_ingredients": false,
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"is_selection": true
+	},
+	"input": {
+		"text": "ok"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Invalid selection! Say anything to see your choices again...",
+	"ts": "1478813688.000046",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "no",
+	"ts": "1478813695.000047",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 1,
+			"intent": "no"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_23_1471337556367",
+			"node_5_1470995072447"
+		],
+		"text": [
+			"False!",
+			"Here is what I've found..."
+		]
+	},
+	"context": {
+		"selection": "ok",
+		"recipes": [
+			{
+				"title": "Basil Cherry Tomatoes",
+				"image": "https://spoonacular.com/recipeImages/Basil-Cherry-Tomatoes-328157.jpg",
+				"missedIngredientCount": 2,
+				"likes": 0,
+				"usedIngredientCount": 1,
+				"id": 328157,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinach Garlic Pasta",
+				"image": "https://spoonacular.com/recipeImages/Spinach-Garlic-Pasta-459549.jpg",
+				"missedIngredientCount": 2,
+				"likes": 30,
+				"usedIngredientCount": 1,
+				"id": 459549,
+				"imageType": "jpg"
+			},
+			{
+				"title": "The Quick Fix Salad Bar Pizza",
+				"image": "https://spoonacular.com/recipeImages/The-Quick-Fix-Salad-Bar-Pizza-591394.jpg",
+				"missedIngredientCount": 2,
+				"likes": 81,
+				"usedIngredientCount": 1,
+				"id": 591394,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinaci (Spinach) alla Padella (Frying Pan)",
+				"image": "https://spoonacular.com/recipeImages/spinaci-spinach-alla-padella-frying-pan-329544.jpeg",
+				"missedIngredientCount": 2,
+				"likes": 1,
+				"usedIngredientCount": 1,
+				"id": 329544,
+				"imageType": "jpeg"
+			},
+			{
+				"title": "How to Make Kale Chips",
+				"image": "https://spoonacular.com/recipeImages/How-to-Make-Kale-Chips-526166.jpg",
+				"missedIngredientCount": 2,
+				"likes": 4,
+				"usedIngredientCount": 1,
+				"id": 526166,
+				"imageType": "jpg"
+			}
+		],
+		"get_recipes": false,
+		"system": {
+			"dialog_turn_counter": 6,
+			"dialog_stack": [
+				"node_5_1470995072447"
+			],
+			"dialog_request_counter": 6
+		},
+		"is_ingredients": true,
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"is_selection": true,
+		"selection_valid": false
+	},
+	"input": {
+		"text": "no"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Lets see here...\nI've found these recipes: \n1. Basil Cherry Tomatoes\n2. Spinach Garlic Pasta\n3. The Quick Fix Salad Bar Pizza\n4. Spinaci (Spinach) alla Padella (Frying Pan)\n5. How to Make Kale Chips\n\nPlease enter the corresponding number of your choice.",
+	"ts": "1478813697.000048",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "r",
+	"ts": "1478813705.000049",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.7509526016616008,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_21_1471330497996"
+		],
+		"text": [
+			"Enter your selection:"
+		]
+	},
+	"context": {
+		"selection": "r",
+		"recipes": [
+			{
+				"title": "Basil Cherry Tomatoes",
+				"image": "https://spoonacular.com/recipeImages/Basil-Cherry-Tomatoes-328157.jpg",
+				"missedIngredientCount": 2,
+				"likes": 0,
+				"usedIngredientCount": 1,
+				"id": 328157,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinach Garlic Pasta",
+				"image": "https://spoonacular.com/recipeImages/Spinach-Garlic-Pasta-459549.jpg",
+				"missedIngredientCount": 2,
+				"likes": 30,
+				"usedIngredientCount": 1,
+				"id": 459549,
+				"imageType": "jpg"
+			},
+			{
+				"title": "The Quick Fix Salad Bar Pizza",
+				"image": "https://spoonacular.com/recipeImages/The-Quick-Fix-Salad-Bar-Pizza-591394.jpg",
+				"missedIngredientCount": 2,
+				"likes": 81,
+				"usedIngredientCount": 1,
+				"id": 591394,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinaci (Spinach) alla Padella (Frying Pan)",
+				"image": "https://spoonacular.com/recipeImages/spinaci-spinach-alla-padella-frying-pan-329544.jpeg",
+				"missedIngredientCount": 2,
+				"likes": 1,
+				"usedIngredientCount": 1,
+				"id": 329544,
+				"imageType": "jpeg"
+			},
+			{
+				"title": "How to Make Kale Chips",
+				"image": "https://spoonacular.com/recipeImages/How-to-Make-Kale-Chips-526166.jpg",
+				"missedIngredientCount": 2,
+				"likes": 4,
+				"usedIngredientCount": 1,
+				"id": 526166,
+				"imageType": "jpg"
+			}
+		],
+		"get_recipes": false,
+		"system": {
+			"dialog_turn_counter": 7,
+			"dialog_stack": [
+				"node_21_1471330497996"
+			],
+			"dialog_request_counter": 7
+		},
+		"is_ingredients": false,
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"is_selection": true,
+		"selection_valid": false
+	},
+	"input": {
+		"text": "r"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Invalid selection! Say anything to see your choices again...",
+	"ts": "1478813707.000050",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "start over",
+	"ts": "1478813775.000051",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.7509526016616008,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_23_1471337556367",
+			"node_5_1470995072447"
+		],
+		"text": [
+			"False!",
+			"Here is what I've found..."
+		]
+	},
+	"context": {
+		"selection": "r",
+		"recipes": [
+			{
+				"title": "Basil Cherry Tomatoes",
+				"image": "https://spoonacular.com/recipeImages/Basil-Cherry-Tomatoes-328157.jpg",
+				"missedIngredientCount": 2,
+				"likes": 0,
+				"usedIngredientCount": 1,
+				"id": 328157,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinach Garlic Pasta",
+				"image": "https://spoonacular.com/recipeImages/Spinach-Garlic-Pasta-459549.jpg",
+				"missedIngredientCount": 2,
+				"likes": 30,
+				"usedIngredientCount": 1,
+				"id": 459549,
+				"imageType": "jpg"
+			},
+			{
+				"title": "The Quick Fix Salad Bar Pizza",
+				"image": "https://spoonacular.com/recipeImages/The-Quick-Fix-Salad-Bar-Pizza-591394.jpg",
+				"missedIngredientCount": 2,
+				"likes": 81,
+				"usedIngredientCount": 1,
+				"id": 591394,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinaci (Spinach) alla Padella (Frying Pan)",
+				"image": "https://spoonacular.com/recipeImages/spinaci-spinach-alla-padella-frying-pan-329544.jpeg",
+				"missedIngredientCount": 2,
+				"likes": 1,
+				"usedIngredientCount": 1,
+				"id": 329544,
+				"imageType": "jpeg"
+			},
+			{
+				"title": "How to Make Kale Chips",
+				"image": "https://spoonacular.com/recipeImages/How-to-Make-Kale-Chips-526166.jpg",
+				"missedIngredientCount": 2,
+				"likes": 4,
+				"usedIngredientCount": 1,
+				"id": 526166,
+				"imageType": "jpg"
+			}
+		],
+		"get_recipes": false,
+		"system": {
+			"dialog_turn_counter": 8,
+			"dialog_stack": [
+				"node_5_1470995072447"
+			],
+			"dialog_request_counter": 8
+		},
+		"is_ingredients": true,
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"is_selection": true,
+		"selection_valid": false
+	},
+	"input": {
+		"text": "start over"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Lets see here...\nI've found these recipes: \n1. Basil Cherry Tomatoes\n2. Spinach Garlic Pasta\n3. The Quick Fix Salad Bar Pizza\n4. Spinaci (Spinach) alla Padella (Frying Pan)\n5. How to Make Kale Chips\n\nPlease enter the corresponding number of your choice.",
+	"ts": "1478813777.000052",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "1",
+	"ts": "1478813781.000053",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.7509526016616008,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_21_1471330497996"
+		],
+		"text": [
+			"Enter your selection:"
+		]
+	},
+	"context": {
+		"selection": "1",
+		"recipes": [
+			{
+				"title": "Basil Cherry Tomatoes",
+				"image": "https://spoonacular.com/recipeImages/Basil-Cherry-Tomatoes-328157.jpg",
+				"missedIngredientCount": 2,
+				"likes": 0,
+				"usedIngredientCount": 1,
+				"id": 328157,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinach Garlic Pasta",
+				"image": "https://spoonacular.com/recipeImages/Spinach-Garlic-Pasta-459549.jpg",
+				"missedIngredientCount": 2,
+				"likes": 30,
+				"usedIngredientCount": 1,
+				"id": 459549,
+				"imageType": "jpg"
+			},
+			{
+				"title": "The Quick Fix Salad Bar Pizza",
+				"image": "https://spoonacular.com/recipeImages/The-Quick-Fix-Salad-Bar-Pizza-591394.jpg",
+				"missedIngredientCount": 2,
+				"likes": 81,
+				"usedIngredientCount": 1,
+				"id": 591394,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinaci (Spinach) alla Padella (Frying Pan)",
+				"image": "https://spoonacular.com/recipeImages/spinaci-spinach-alla-padella-frying-pan-329544.jpeg",
+				"missedIngredientCount": 2,
+				"likes": 1,
+				"usedIngredientCount": 1,
+				"id": 329544,
+				"imageType": "jpeg"
+			},
+			{
+				"title": "How to Make Kale Chips",
+				"image": "https://spoonacular.com/recipeImages/How-to-Make-Kale-Chips-526166.jpg",
+				"missedIngredientCount": 2,
+				"likes": 4,
+				"usedIngredientCount": 1,
+				"id": 526166,
+				"imageType": "jpg"
+			}
+		],
+		"get_recipes": false,
+		"system": {
+			"dialog_turn_counter": 9,
+			"dialog_stack": [
+				"node_21_1471330497996"
+			],
+			"dialog_request_counter": 9
+		},
+		"is_ingredients": false,
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"is_selection": true,
+		"selection_valid": false
+	},
+	"input": {
+		"text": "1"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "Ok, it takes *10* minutes to make *6* servings of *Basil Cherry Tomatoes*. Here are the steps:\n\n*Step 1*:\n_Equipment_: bowl\n_Action_: In a large bowl, combine the tomatoes, basil, oil, salt and pepper. Cover and refrigerate until serving.\n\n*Step 2*:\n_Equipment_: None\n_Action_: Serve on lettuce if desired.\n\n*Say anything to me to start over...*",
+	"ts": "1478813784.000054",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "hi",
+	"ts": "1478813794.000055",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.7509526016616008,
+			"intent": "yes"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_22_1471330823481",
+			"node_1_1470199483860"
+		],
+		"text": [
+			"True!",
+			"Hi, I'm the Watson RecipeBot. I know a lot about recipes. How can I help you?"
+		]
+	},
+	"context": {
+		"selection": "1",
+		"recipes": [
+			{
+				"title": "Basil Cherry Tomatoes",
+				"image": "https://spoonacular.com/recipeImages/Basil-Cherry-Tomatoes-328157.jpg",
+				"missedIngredientCount": 2,
+				"likes": 0,
+				"usedIngredientCount": 1,
+				"id": 328157,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinach Garlic Pasta",
+				"image": "https://spoonacular.com/recipeImages/Spinach-Garlic-Pasta-459549.jpg",
+				"missedIngredientCount": 2,
+				"likes": 30,
+				"usedIngredientCount": 1,
+				"id": 459549,
+				"imageType": "jpg"
+			},
+			{
+				"title": "The Quick Fix Salad Bar Pizza",
+				"image": "https://spoonacular.com/recipeImages/The-Quick-Fix-Salad-Bar-Pizza-591394.jpg",
+				"missedIngredientCount": 2,
+				"likes": 81,
+				"usedIngredientCount": 1,
+				"id": 591394,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinaci (Spinach) alla Padella (Frying Pan)",
+				"image": "https://spoonacular.com/recipeImages/spinaci-spinach-alla-padella-frying-pan-329544.jpeg",
+				"missedIngredientCount": 2,
+				"likes": 1,
+				"usedIngredientCount": 1,
+				"id": 329544,
+				"imageType": "jpeg"
+			},
+			{
+				"title": "How to Make Kale Chips",
+				"image": "https://spoonacular.com/recipeImages/How-to-Make-Kale-Chips-526166.jpg",
+				"missedIngredientCount": 2,
+				"likes": 4,
+				"usedIngredientCount": 1,
+				"id": 526166,
+				"imageType": "jpg"
+			}
+		],
+		"get_recipes": false,
+		"system": {
+			"dialog_turn_counter": 10,
+			"dialog_stack": [
+				"node_1_1470199483860"
+			],
+			"dialog_request_counter": 10
+		},
+		"is_ingredients": false,
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"is_selection": false,
+		"selection_valid": true
+	},
+	"input": {
+		"text": "hi"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "True!\nHi, I'm the Watson RecipeBot. I know a lot about recipes. How can I help you?\n",
+	"ts": "1478813796.000056",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}{
+	"url": "wss://mpmulti-he31.slack-msgs.com/websocket/r0_hgp-AHOF4XR52PL1OH9DYNw7RTgw4fQ4BXV_1POraiQKPvBUonuhxYTuH-GSkhhGt7UnDTKllUbuIz9MaD2su30IoetBqezJLdBz3MVWqqgc_fS-_zMM3fAAoRSnd6HvGRL5V_bY7GxczFlskWinV3EnibrP6z-u-ewtult0=",
+	"type": "reconnect_url"
+}{
+	"type": "user_typing",
+	"user": "U2JBLUPL2",
+	"channel": "D30DZUR0Q"
+}{
+	"text": "Find me something to eat",
+	"ts": "1478813922.000057",
+	"user": "U2JBLUPL2",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"channel": "D30DZUR0Q"
+}{
+	"entities": [],
+	"intents": [
+		{
+			"confidence": 0.918412710083298,
+			"intent": "start_cooking"
+		}
+	],
+	"output": {
+		"log_messages": [],
+		"nodes_visited": [
+			"node_2_1470200792636"
+		],
+		"text": [
+			"I can help with that! Are you looking to use specific ingredients?"
+		]
+	},
+	"context": {
+		"selection": "1",
+		"recipes": [
+			{
+				"title": "Basil Cherry Tomatoes",
+				"image": "https://spoonacular.com/recipeImages/Basil-Cherry-Tomatoes-328157.jpg",
+				"missedIngredientCount": 2,
+				"likes": 0,
+				"usedIngredientCount": 1,
+				"id": 328157,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinach Garlic Pasta",
+				"image": "https://spoonacular.com/recipeImages/Spinach-Garlic-Pasta-459549.jpg",
+				"missedIngredientCount": 2,
+				"likes": 30,
+				"usedIngredientCount": 1,
+				"id": 459549,
+				"imageType": "jpg"
+			},
+			{
+				"title": "The Quick Fix Salad Bar Pizza",
+				"image": "https://spoonacular.com/recipeImages/The-Quick-Fix-Salad-Bar-Pizza-591394.jpg",
+				"missedIngredientCount": 2,
+				"likes": 81,
+				"usedIngredientCount": 1,
+				"id": 591394,
+				"imageType": "jpg"
+			},
+			{
+				"title": "Spinaci (Spinach) alla Padella (Frying Pan)",
+				"image": "https://spoonacular.com/recipeImages/spinaci-spinach-alla-padella-frying-pan-329544.jpeg",
+				"missedIngredientCount": 2,
+				"likes": 1,
+				"usedIngredientCount": 1,
+				"id": 329544,
+				"imageType": "jpeg"
+			},
+			{
+				"title": "How to Make Kale Chips",
+				"image": "https://spoonacular.com/recipeImages/How-to-Make-Kale-Chips-526166.jpg",
+				"missedIngredientCount": 2,
+				"likes": 4,
+				"usedIngredientCount": 1,
+				"id": 526166,
+				"imageType": "jpg"
+			}
+		],
+		"get_recipes": false,
+		"system": {
+			"dialog_turn_counter": 11,
+			"dialog_stack": [
+				"node_2_1470200792636"
+			],
+			"dialog_request_counter": 11
+		},
+		"is_ingredients": false,
+		"conversation_id": "4893db02-3d6f-41d9-ba12-dec13ed19b81",
+		"is_selection": false,
+		"selection_valid": true
+	},
+	"input": {
+		"text": "find me something to eat"
+	}
+}{
+	"user_profile": {
+		"avatar_hash": "d99bcaf78d30",
+		"first_name": null,
+		"real_name": "",
+		"name": "souschef",
+		"image_72": "https://avatars.slack-edge.com/2016-11-10/103182955442_d99bcaf78d30af2437fa_72.png"
+	},
+	"text": "I can help with that! Are you looking to use specific ingredients?\n",
+	"ts": "1478813924.000058",
+	"user": "U317LEJ2Y",
+	"channel": "D30DZUR0Q",
+	"team": "T2JBE70VD",
+	"type": "message",
+	"user_team": "T2JBE70VD",
+	"bot_id": "B30EX981F"
+}
