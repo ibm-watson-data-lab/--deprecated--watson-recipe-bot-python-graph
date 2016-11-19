@@ -7,7 +7,7 @@ class GraphDbOps(object):
     def __init__(self, creds, logger):
         self.logger = logger
         self.http_ops = HttpOps(creds, logger)
-        self.query_prefix = "def gt = graph.traversal(); "
+        self.query_prefix = "def g = graph.traversal(); "
         self.vertices = {}
         self.edges = {}
 
@@ -78,6 +78,7 @@ class GraphDbOps(object):
             query_json = {"gremlin": query_str}
         resp = self.http_ops.do_post('/gremlin', query_json)
         self.logger.info('{0}'.format(resp))
+        return resp['result']['data']
 
     def bulkload_graphson(self):
         resp = self.http_ops.do_post(
