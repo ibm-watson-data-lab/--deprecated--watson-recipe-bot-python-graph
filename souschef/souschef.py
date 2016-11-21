@@ -160,6 +160,7 @@ class SousChef:
         return response
 
     def handle_selection_message(self, state, selection):
+
         if 1 <= selection <= 5:
             # we want to get a the recipe based on the selection
             # first we see if we already have the recipe in our graph
