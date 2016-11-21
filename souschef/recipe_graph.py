@@ -1,20 +1,16 @@
-from graph_db_ops import GraphDbOps
-
 import json
 
 
 class RecipeGraph(object):
-    def __init__(self, credentials, logger):
-        self.logger = logger
-        self.db_ops = GraphDbOps(credentials, logger)
+    def __init__(self, graph_client):
+        self.graph_client = graph_client
 
     def init_graph(self):
-        self.logger.info("Getting Graph Schema...")
-        self.db_ops.log_in()
-        schema = self.db_ops.get_schema()
+        print 'Getting Graph Schema...'
+        schema = self.graph_client.get_schema()
         schema_exists = (schema is not None and schema['propertyKeys'] is not None and len(schema['propertyKeys']) > 0)
         if not schema_exists:
-            self.logger.info("Creating Graph Schema...")
+            print 'Creating Graph Schema...'
             schema = {
                 'propertyKeys': [
                     {'name': 'name', 'dataType': 'String', 'cardinality': 'SINGLE'},
@@ -35,9 +31,9 @@ class RecipeGraph(object):
                 ],
                 'edgeIndexes': []
             }
-            self.db_ops.save_schema(schema)
+            self.graph_client.save_schema(schema)
         else:
-            self.logger.info("Graph Schema exists.")
+            print 'Graph Schema exists.'
 
     # User
 
@@ -127,7 +123,7 @@ class RecipeGraph(object):
 
     def find_recipes_for_user(self, user_id):
         query = 'g.V().hasLabel("person").has("name", "{}").outE().inV().hasLabel("recipe").path()'.format(user_id)
-        response = self.db_ops.execute_gremlin_query(query)
+        response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
             return response
         else:
@@ -172,7 +168,7 @@ class RecipeGraph(object):
 
     def find_vertex(self, label, property_name, property_value):
         query = 'g.V().hasLabel("{}").has("{}", "{}")'.format(label, property_name, property_value)
-        response = self.db_ops.execute_gremlin_query(query)
+        response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
             return response[0]
         else:
@@ -181,23 +177,23 @@ class RecipeGraph(object):
     def add_vertex_if_not_exists(self, vertex, unique_property_name):
         property_value = vertex['properties'][unique_property_name]
         query = 'g.V().hasLabel("{}").has("{}", "{}")'.format(vertex['label'], unique_property_name, property_value)
-        response = self.db_ops.execute_gremlin_query(query)
+        response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
-            self.logger.info("Returning {} vertex where {}={}".format(vertex['label'], unique_property_name, property_value))
+            print 'Returning {} vertex where {}={}'.format(vertex['label'], unique_property_name, property_value)
             return response[0]
         else:
-            self.logger.info("Creating {} vertex where {}={}".format(vertex['label'], unique_property_name, property_value))
-            return self.db_ops.add_or_update_vertex(vertex)
+            print 'Creating {} vertex where {}={}'.format(vertex['label'], unique_property_name, property_value)
+            return self.graph_client.add_vertex(vertex)
 
     def add_update_edge(self, edge):
         query = 'g.V({}).outE().inV().hasId({}).path()'.format(edge['outV'], edge['inV'])
-        response = self.db_ops.execute_gremlin_query(query)
+        response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
             edge = response[0]['objects'][1]
             count = 0
             if 'count' in edge['properties'].keys():
                 count = edge['properties']['count']
             edge['properties']['count'] = count + 1
-            self.db_ops.add_or_update_edge(edge, edge['id'])
+            self.graph_client.update_edge(edge)
         else:
-            self.db_ops.add_or_update_edge(edge)
+            self.graph_client.add_edge(edge)
