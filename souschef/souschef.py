@@ -81,11 +81,11 @@ class SousChef:
         matching_recipes = []
         paths = self.recipe_graph.find_recipes_for_user(state.user_id)
         if paths is not None and len(paths) > 0:
-            paths.sort(key=lambda x: x['objects'][1]['properties']['count'], reverse=True)
+            paths.sort(key=lambda x: x.objects[1].get_property_value('count'), reverse=True)
             for path in paths:
                 matching_recipes.append({
-                    'id': path['objects'][2]['properties']['name'][0]['value'],
-                    'title': path['objects'][2]['properties']['title'][0]['value']
+                    'id': path.objects[2].get_property_value('name'),
+                    'title': path.objects[2].get_property_value('title')
                 })
         # update state
         state.conversation_context['recipes'] = matching_recipes
@@ -108,7 +108,7 @@ class SousChef:
         ingredient_vertex = self.recipe_graph.find_ingredients_vertex(ingredients_str)
         if ingredient_vertex is not None:
             print "Ingredients vertex exists for {}. Returning recipes from vertex.".format(ingredients_str)
-            matching_recipes = json.loads(ingredient_vertex['properties']['detail'][0]['value'])
+            matching_recipes = json.loads(ingredient_vertex.get_property_value('detail'))
             # increment the count on the user-ingredient edge
             self.recipe_graph.increment_ingredient_edge(ingredient_vertex, state.user_vertex)
         else:
@@ -137,7 +137,7 @@ class SousChef:
         cuisine_vertex = self.recipe_graph.find_cuisine_vertex(cuisine)
         if cuisine_vertex is not None:
             print "Cuisine vertex exists for {}. Returning recipes from vertex.".format(cuisine)
-            matching_recipes = json.loads(cuisine_vertex['properties']['detail'][0]['value'])
+            matching_recipes = json.loads(cuisine_vertex.get_property_value('detail'))
             # increment the count on the user-cuisine edge
             self.recipe_graph.increment_cuisine_edge(cuisine_vertex, state.user_vertex)
         else:
@@ -169,7 +169,7 @@ class SousChef:
             recipe_vertex = self.recipe_graph.find_recipe_vertex(recipe_id)
             if recipe_vertex is not None:
                 print "Recipe vertex exists for {}. Returning recipe steps from vertex.".format(recipe_id)
-                recipe_detail = recipe_vertex['properties']['detail'][0]['value']
+                recipe_detail = recipe_vertex.get_property_value('detail')
                 # increment the count on the ingredient/cuisine-recipe edge and the user-recipe edge
                 self.recipe_graph.increment_recipe_edges(recipe_vertex, state.ingredient_cuisine_vertex, state.user_vertex)
             else:
