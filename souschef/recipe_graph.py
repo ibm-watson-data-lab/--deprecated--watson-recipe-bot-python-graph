@@ -150,7 +150,7 @@ class RecipeGraph(object):
             return None
 
     def add_vertex_if_not_exists(self, vertex, unique_property_name):
-        property_value = vertex['properties'][unique_property_name]
+        property_value = vertex.get_property_value(unique_property_name)
         query = 'g.V().hasLabel("{}").has("{}", "{}")'.format(vertex.label, unique_property_name, property_value)
         response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
@@ -161,7 +161,7 @@ class RecipeGraph(object):
             return self.graph_client.add_vertex(vertex)
 
     def add_update_edge(self, edge):
-        query = 'g.V({}).outE().inV().hasId({}).path()'.format(edge['outV'], edge['inV'])
+        query = 'g.V({}).outE().inV().hasId({}).path()'.format(edge.out_v, edge.in_v)
         response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
             edge = response[0].objects[1]
