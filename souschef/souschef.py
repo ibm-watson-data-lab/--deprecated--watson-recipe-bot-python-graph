@@ -75,7 +75,7 @@ class SousChef:
         return response
 
     def handle_favorites_message(self, state):
-        recipes = self.recipe_store.find_favorite_recipes_for_user(state.user_id, 5)
+        recipes = self.recipe_store.find_favorite_recipes_for_user(state.user, 5)
         # update state
         state.conversation_context['recipes'] = recipes
         state.ingredient_cuisine = None

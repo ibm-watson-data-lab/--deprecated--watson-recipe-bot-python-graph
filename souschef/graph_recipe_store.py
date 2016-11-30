@@ -109,8 +109,8 @@ class GraphRecipeStore(object):
     def find_recipe(self, recipe_id):
         return self.find('recipe', 'name', self.get_unique_recipe_name(recipe_id))
 
-    def find_favorite_recipes_for_user(self, user_id, count):
-        query = 'g.V().hasLabel("person").has("name", "{}").outE().inV().hasLabel("recipe").path()'.format(user_id)
+    def find_favorite_recipes_for_user(self, user_vertex, count):
+        query = 'g.V().hasLabel("person").has("name", "{}").outE().inV().hasLabel("recipe").path()'.format(user_vertex.get_property_value('name'))
         paths = self.graph_client.run_gremlin_query(query)
         if len(paths) > 0:
             paths.sort(key=lambda x: x.objects[1].get_property_value('count'), reverse=True)
