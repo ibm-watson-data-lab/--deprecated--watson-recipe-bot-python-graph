@@ -9,11 +9,11 @@ from ibm_graph.schema import VertexIndex
 from ibm_graph.schema import VertexLabel
 
 
-class RecipeGraph(object):
+class GraphRecipeStore(object):
     def __init__(self, graph_client):
         self.graph_client = graph_client
 
-    def init_graph(self):
+    def init(self):
         print 'Getting Graph Schema...'
         schema = self.graph_client.get_schema()
         schema_exists = (schema is not None and schema.property_keys is not None and len(schema.property_keys) > 0)
@@ -44,7 +44,7 @@ class RecipeGraph(object):
 
     # User
 
-    def add_user_vertex(self, user_id):
+    def add_user(self, user_id):
         vertex = Vertex('person', {
             'name': user_id
         })
@@ -58,19 +58,19 @@ class RecipeGraph(object):
         ingredients.sort()
         return ','.join([x for x in ingredients])
 
-    def find_ingredients_vertex(self, ingredients_str):
-        return self.find_vertex('ingredient', 'name', self.get_unique_ingredients_name(ingredients_str))
+    def find_ingredient(self, ingredients_str):
+        return self.find('ingredient', 'name', self.get_unique_ingredients_name(ingredients_str))
 
-    def add_ingredients_vertex(self, ingredients_str, matching_recipes, user_vertex):
+    def add_ingredient(self, ingredients_str, matching_recipes, user_vertex):
         ingredient_vertex = Vertex('ingredient', {
             'name': self.get_unique_ingredients_name(ingredients_str),
             'detail': json.dumps(matching_recipes)
         })
         ingredient_vertex = self.add_vertex_if_not_exists(ingredient_vertex, 'name')
-        self.increment_ingredient_edge(ingredient_vertex, user_vertex)
+        self.increment_ingredient_for_user(ingredient_vertex, user_vertex)
         return ingredient_vertex
 
-    def increment_ingredient_edge(self, ingredient_vertex, user_vertex):
+    def increment_ingredient_for_user(self, ingredient_vertex, user_vertex):
         ingredient_edge = Edge('selects', user_vertex.id, ingredient_vertex.id, {
             'count': 1
         })
@@ -82,19 +82,19 @@ class RecipeGraph(object):
     def get_unique_cuisine_name(cuisine):
         return cuisine.strip().lower()
 
-    def find_cuisine_vertex(self, cuisine_str):
-        return self.find_vertex('cuisine', 'name', self.get_unique_cuisine_name(cuisine_str))
+    def find_cuisine(self, cuisine_str):
+        return self.find('cuisine', 'name', self.get_unique_cuisine_name(cuisine_str))
 
-    def add_cuisine_vertex(self, cuisine_str, matching_recipes, user_vertex):
+    def add_cuisine(self, cuisine_str, matching_recipes, user_vertex):
         cuisine_vertex = Vertex('cuisine', {
             'name': self.get_unique_cuisine_name(cuisine_str),
             'detail': json.dumps(matching_recipes)
         })
         cuisine_vertex = self.add_vertex_if_not_exists(cuisine_vertex, 'name')
-        self.increment_cuisine_edge(cuisine_vertex, user_vertex)
+        self.increment_cuisine_for_user(cuisine_vertex, user_vertex)
         return cuisine_vertex
 
-    def increment_cuisine_edge(self, cuisine_vertex, user_vertex):
+    def increment_cuisine_for_user(self, cuisine_vertex, user_vertex):
         cuisine_edge = Edge('selects', user_vertex.id, cuisine_vertex.id, {
             'count': 1
         })
@@ -106,8 +106,8 @@ class RecipeGraph(object):
     def get_unique_recipe_name(recipe_id):
         return str(recipe_id).strip().lower()
 
-    def find_recipe_vertex(self, recipe_id):
-        return self.find_vertex('recipe', 'name', self.get_unique_recipe_name(recipe_id))
+    def find_recipe(self, recipe_id):
+        return self.find('recipe', 'name', self.get_unique_recipe_name(recipe_id))
 
     def find_recipes_for_user(self, user_id):
         query = 'g.V().hasLabel("person").has("name", "{}").outE().inV().hasLabel("recipe").path()'.format(user_id)
@@ -117,17 +117,17 @@ class RecipeGraph(object):
         else:
             return None
 
-    def add_recipe_vertex(self, recipe_id, recipe_title, recipe_detail, ingredient_cuisine_vertex, user_vertex):
+    def add_recipe(self, recipe_id, recipe_title, recipe_detail, ingredient_cuisine_vertex, user_vertex):
         recipe_vertex = Vertex('recipe', {
             'name': self.get_unique_recipe_name(recipe_id),
             'title': recipe_title.strip(),
             'detail': recipe_detail
         })
         recipe_vertex = self.add_vertex_if_not_exists(recipe_vertex, 'name')
-        self.increment_recipe_edges(recipe_vertex, ingredient_cuisine_vertex, user_vertex)
+        self.increment_recipe_for_user(recipe_vertex, ingredient_cuisine_vertex, user_vertex)
         return recipe_vertex
 
-    def increment_recipe_edges(self, recipe_vertex, ingredient_cuisine_vertex, user_vertex):
+    def increment_recipe_for_user(self, recipe_vertex, ingredient_cuisine_vertex, user_vertex):
         # add one edge from the user to the recipe (this will let us find a user's favorite recipes, etc)
         edge = Edge('selects', user_vertex.id, recipe_vertex.id, {
             'count': 1
@@ -141,7 +141,7 @@ class RecipeGraph(object):
 
     # Graph Helper Methods
 
-    def find_vertex(self, label, property_name, property_value):
+    def find(self, label, property_name, property_value):
         query = 'g.V().hasLabel("{}").has("{}", "{}")'.format(label, property_name, property_value)
         response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:

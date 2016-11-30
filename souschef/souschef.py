@@ -1,16 +1,13 @@
 import json
-import os
 import pprint
 import time
-from slackclient import SlackClient
-from recipe import RecipeClient
 from user_state import UserState
 
 
 class SousChef:
-    def __init__(self, recipe_graph, bot_id, slack_client, conversation_client, conversation_workspace_id,
+    def __init__(self, recipe_store, bot_id, slack_client, conversation_client, conversation_workspace_id,
                  recipe_client):
-        self.recipe_graph = recipe_graph
+        self.recipe_store = recipe_store
         self.bot_id = bot_id
 
         self.slack_client = slack_client
@@ -69,9 +66,9 @@ class SousChef:
         return response
 
     def handle_start_message(self, state, watson_response):
-        if state.user_vertex is None:
-            user_vertex = self.recipe_graph.add_user_vertex(state.user_id)
-            state.user_vertex = user_vertex
+        if state.user is None:
+            user = self.recipe_store.add_user(state.user_id)
+            state.user = user
         response = ''
         for text in watson_response['output']['text']:
             response += text + "\n"
@@ -79,7 +76,7 @@ class SousChef:
 
     def handle_favorites_message(self, state):
         matching_recipes = []
-        paths = self.recipe_graph.find_recipes_for_user(state.user_id)
+        paths = self.recipe_store.find_recipes_for_user(state.user_id)
         if paths is not None and len(paths) > 0:
             paths.sort(key=lambda x: x.objects[1].get_property_value('count'), reverse=True)
             for path in paths:
@@ -89,98 +86,87 @@ class SousChef:
                 })
         # update state
         state.conversation_context['recipes'] = matching_recipes
-        state.ingredient_cuisine_vertex = None
-        # return the response
-        response = "Lets see here...\n" + \
-                   "I've found these recipes: \n"
-
+        state.ingredient_cuisine = None
+        # build and return response
+        response = "Lets see here...\nI've found these recipes:\n"
         for i, recipe in enumerate(state.conversation_context['recipes']):
             response += str(i + 1) + ". " + recipe['title'] + "\n"
         response += "\nPlease enter the corresponding number of your choice."
-
         return response
 
     def handle_ingredients_message(self, state, message):
-
         # we want to get a list of recipes based on the ingredients (message)
-        # first we see if we already have the ingredients in our graph
+        # first we see if we already have the ingredients in our datastore
         ingredients_str = message
-        ingredient_vertex = self.recipe_graph.find_ingredients_vertex(ingredients_str)
-        if ingredient_vertex is not None:
-            print "Ingredients vertex exists for {}. Returning recipes from vertex.".format(ingredients_str)
-            matching_recipes = json.loads(ingredient_vertex.get_property_value('detail'))
-            # increment the count on the user-ingredient edge
-            self.recipe_graph.increment_ingredient_edge(ingredient_vertex, state.user_vertex)
+        ingredient = self.recipe_store.find_ingredient(ingredients_str)
+        if ingredient is not None:
+            print "Ingredient exists for {}. Returning recipes from datastore.".format(ingredients_str)
+            matching_recipes = json.loads(ingredient.get_property_value('detail'))
+            # increment the count on the user-ingredient
+            self.recipe_store.increment_ingredient_for_user(ingredient, state.user)
         else:
-            # we don't have the ingredients in our graph yet, so get list of recipes from Spoonacular
-            print "Ingredients vertex does not exist for {}. Querying Spoonacular for recipes.".format(ingredients_str)
+            # we don't have the ingredients in our datastore yet, so get list of recipes from Spoonacular
+            print "Ingredient does not exist for {}. Querying Spoonacular for recipes.".format(ingredients_str)
             matching_recipes = self.recipe_client.find_by_ingredients(ingredients_str);
-            # add vertex for the ingredients to our graph
-            ingredient_vertex = self.recipe_graph.add_ingredients_vertex(ingredients_str, matching_recipes, state.user_vertex)
-
+            # add ingredient
+            ingredient = self.recipe_store.add_ingredient(ingredients_str, matching_recipes, state.user)
+        # update state
         state.conversation_context['recipes'] = matching_recipes
-        state.ingredient_cuisine_vertex = ingredient_vertex
-
-        response = "Lets see here...\n" + \
-                   "I've found these recipes: \n"
-
+        state.ingredient_cuisine = ingredient
+        # build and return response
+        response = "Lets see here...\nI've found these recipes:\n"
         for i, recipe in enumerate(state.conversation_context['recipes']):
             response += str(i + 1) + ". " + recipe['title'] + "\n"
         response += "\nPlease enter the corresponding number of your choice."
-
         return response
 
-    def handle_cuisine_message(self, state, cuisine):
-        
+    def handle_cuisine_message(self, state, message):
         # we want to get a list of recipes based on the cuisine
-        # first we see if we already have the cuisine in our graph
-        cuisine_vertex = self.recipe_graph.find_cuisine_vertex(cuisine)
-        if cuisine_vertex is not None:
-            print "Cuisine vertex exists for {}. Returning recipes from vertex.".format(cuisine)
-            matching_recipes = json.loads(cuisine_vertex.get_property_value('detail'))
-            # increment the count on the user-cuisine edge
-            self.recipe_graph.increment_cuisine_edge(cuisine_vertex, state.user_vertex)
+        # first we see if we already have the cuisine in our datastore
+        cuisine_str = message
+        cuisine = self.recipe_store.find_cuisine(cuisine_str)
+        if cuisine is not None:
+            print "Cuisine exists for {}. Returning recipes from datastore.".format(cuisine_str)
+            matching_recipes = json.loads(cuisine.get_property_value('detail'))
+            # increment the count on the user-cuisine
+            self.recipe_store.increment_cuisine_for_user(cuisine, state.user)
         else:
-            # we don't have the cuisine in our graph yet, so get list of recipes from Spoonacular
-            print "Cuisine vertex does not exist for {}. Querying Spoonacular for recipes.".format(cuisine)
-            matching_recipes = self.recipe_client.find_by_cuisine(cuisine);
-            # add vertex for the cuisine to our graph
-            cuisine_vertex = self.recipe_graph.add_cuisine_vertex(cuisine, matching_recipes, state.user_vertex)
-
+            # we don't have the cuisine in our datastore yet, so get list of recipes from Spoonacular
+            print "Cuisine does not exist for {}. Querying Spoonacular for recipes.".format(cuisine_str)
+            matching_recipes = self.recipe_client.find_by_cuisine(cuisine_str);
+            # add cuisine
+            cuisine = self.recipe_store.add_cuisine(cuisine_str, matching_recipes, state.user)
+        # update state
         state.conversation_context['recipes'] = matching_recipes
-        state.ingredient_cuisine_vertex = cuisine_vertex
-
-        response = "Lets see here...\n" + \
-                   "I've found these recipes: \n"
-
+        state.ingredient_cuisine = cuisine
+        # build and return response
+        response = "Lets see here...\nI've found these recipes:\n"
         for i, recipe in enumerate(state.conversation_context['recipes']):
             response += str(i + 1) + ". " + recipe['title'] + "\n"
         response += "\nPlease enter the corresponding number of your choice."
-
         return response
 
     def handle_selection_message(self, state, selection):
-
         if 1 <= selection <= 5:
             # we want to get a the recipe based on the selection
-            # first we see if we already have the recipe in our graph
+            # first we see if we already have the recipe in our datastore
             recipes = state.conversation_context['recipes']
             recipe_id = recipes[selection-1]['id']
-            recipe_vertex = self.recipe_graph.find_recipe_vertex(recipe_id)
-            if recipe_vertex is not None:
-                print "Recipe vertex exists for {}. Returning recipe steps from vertex.".format(recipe_id)
-                recipe_detail = recipe_vertex.get_property_value('detail')
-                # increment the count on the ingredient/cuisine-recipe edge and the user-recipe edge
-                self.recipe_graph.increment_recipe_edges(recipe_vertex, state.ingredient_cuisine_vertex, state.user_vertex)
+            recipe = self.recipe_store.find_recipe(recipe_id)
+            if recipe is not None:
+                print "Recipe exists for {}. Returning recipe steps from datastore.".format(recipe_id)
+                recipe_detail = recipe.get_property_value('detail')
+                # increment the count on the ingredient/cuisine-recipe and the user-recipe
+                self.recipe_store.increment_recipe_for_user(recipe, state.ingredient_cuisine, state.user)
             else:
-                print "Recipe vertex does not exist for {}. Querying Spoonacular for details.".format(recipe_id)
+                print "Recipe does not exist for {}. Querying Spoonacular for details.".format(recipe_id)
                 recipe_info = self.recipe_client.get_info_by_id(recipe_id)
                 recipe_steps = self.recipe_client.get_steps_by_id(recipe_id)
                 recipe_detail = self.make_formatted_steps(recipe_info, recipe_steps);
-                # add vertex for recipe
-                self.recipe_graph.add_recipe_vertex(recipe_id, recipe_info['title'], recipe_detail, state.ingredient_cuisine_vertex, state.user_vertex)
+                # add recipe
+                self.recipe_store.add_recipe(recipe_id, recipe_info['title'], recipe_detail, state.ingredient_cuisine, state.user)
             # clear out state
-            state.ingredient_cuisine_vertex = None
+            state.ingredient_cuisine = None
             state.conversation_context = None
             # return response
             return recipe_detail
@@ -231,7 +217,7 @@ class SousChef:
         self.post_to_slack(response, channel)
 
     def run(self):
-        self.recipe_graph.init_graph()
+        self.recipe_store.init()
         if self.slack_client.rtm_connect():
             print("sous-chef is connected and running!")
             while True:
