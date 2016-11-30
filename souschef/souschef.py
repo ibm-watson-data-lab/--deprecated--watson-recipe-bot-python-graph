@@ -108,7 +108,7 @@ class SousChef:
             # we don't have the ingredients in our datastore yet, so get list of recipes from Spoonacular
             print "Ingredient does not exist for {}. Querying Spoonacular for recipes.".format(ingredients_str)
             matching_recipes = self.recipe_client.find_by_ingredients(ingredients_str);
-            # add ingredient
+            # add ingredient to datastore
             ingredient = self.recipe_store.add_ingredient(ingredients_str, matching_recipes, state.user)
         # update state
         state.conversation_context['recipes'] = matching_recipes
@@ -134,7 +134,7 @@ class SousChef:
             # we don't have the cuisine in our datastore yet, so get list of recipes from Spoonacular
             print "Cuisine does not exist for {}. Querying Spoonacular for recipes.".format(cuisine_str)
             matching_recipes = self.recipe_client.find_by_cuisine(cuisine_str);
-            # add cuisine
+            # add cuisine to datastore
             cuisine = self.recipe_store.add_cuisine(cuisine_str, matching_recipes, state.user)
         # update state
         state.conversation_context['recipes'] = matching_recipes
@@ -163,7 +163,7 @@ class SousChef:
                 recipe_info = self.recipe_client.get_info_by_id(recipe_id)
                 recipe_steps = self.recipe_client.get_steps_by_id(recipe_id)
                 recipe_detail = self.make_formatted_steps(recipe_info, recipe_steps);
-                # add recipe
+                # add recipe to datastore
                 self.recipe_store.add_recipe(recipe_id, recipe_info['title'], recipe_detail, state.ingredient_cuisine, state.user)
             # clear out state
             state.ingredient_cuisine = None
