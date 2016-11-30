@@ -75,17 +75,9 @@ class SousChef:
         return response
 
     def handle_favorites_message(self, state):
-        matching_recipes = []
-        paths = self.recipe_store.find_recipes_for_user(state.user_id)
-        if paths is not None and len(paths) > 0:
-            paths.sort(key=lambda x: x.objects[1].get_property_value('count'), reverse=True)
-            for path in paths:
-                matching_recipes.append({
-                    'id': path.objects[2].get_property_value('name'),
-                    'title': path.objects[2].get_property_value('title')
-                })
+        recipes = self.recipe_store.find_favorite_recipes_for_user(state.user_id, 5)
         # update state
-        state.conversation_context['recipes'] = matching_recipes
+        state.conversation_context['recipes'] = recipes
         state.ingredient_cuisine = None
         # build and return response
         response = "Lets see here...\nI've found these recipes:\n"
