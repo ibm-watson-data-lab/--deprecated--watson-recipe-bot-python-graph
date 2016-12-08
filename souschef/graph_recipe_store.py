@@ -22,7 +22,7 @@ class GraphRecipeStore(object):
 
     def init(self):
         """
-        Creates and initializes the graph schema.
+        Creates and initializes the Graph schema.
         """
         print 'Getting Graph Schema...'
         schema = self.graph_client.get_schema()
@@ -87,7 +87,7 @@ class GraphRecipeStore(object):
         ----------
         ingredient_str - The ingredient or comma-separated list of ingredients specified by the user
         """
-        return self.find('ingredient', 'name', self.get_unique_ingredients_name(ingredients_str))
+        return self.find_vertex('ingredient', 'name', self.get_unique_ingredients_name(ingredients_str))
 
     def add_ingredient(self, ingredients_str, matching_recipes, user_vertex):
         """
@@ -139,7 +139,7 @@ class GraphRecipeStore(object):
         ----------
         cuisine - The cuisine specified by the user
         """
-        return self.find('cuisine', 'name', self.get_unique_cuisine_name(cuisine_str))
+        return self.find_vertex('cuisine', 'name', self.get_unique_cuisine_name(cuisine_str))
 
     def add_cuisine(self, cuisine_str, matching_recipes, user_vertex):
         """
@@ -191,7 +191,7 @@ class GraphRecipeStore(object):
         ----------
         recipe_id - The ID of the recipe (typically the ID of the recipe returned from Spoonacular)
         """
-        return self.find('recipe', 'name', self.get_unique_recipe_name(recipe_id))
+        return self.find_vertex('recipe', 'name', self.get_unique_recipe_name(recipe_id))
 
     def find_favorite_recipes_for_user(self, user_vertex, count):
         """
@@ -262,7 +262,7 @@ class GraphRecipeStore(object):
 
     # Graph Helper Methods
 
-    def find(self, label, property_name, property_value):
+    def find_vertex(self, label, property_name, property_value):
         """
         Finds a vertex based on the specified label, property_name, and property_value.
         Parameters
