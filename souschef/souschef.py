@@ -7,7 +7,7 @@ from user_state import UserState
 
 class SousChef(threading.Thread):
 
-    def __init__(self, slack_bot_id, slack_client, conversation_client, conversation_workspace_id, recipe_client, recipe_store):
+    def __init__(self, slack_bot_id, slack_client, conversation_client, conversation_workspace_id, recipe_client, recipe_store, sns_client):
         threading.Thread.__init__(self)
         self.running = True
         self.slack_bot_id = slack_bot_id
@@ -16,6 +16,7 @@ class SousChef(threading.Thread):
         self.conversation_workspace_id = conversation_workspace_id
         self.recipe_client = recipe_client
         self.recipe_store = recipe_store
+        self.sns_client = sns_client
         #
         self.at_bot = "<@" + slack_bot_id + ">:"
         self.delay = 0.5  # second
@@ -77,6 +78,11 @@ class SousChef(threading.Thread):
         response = ''
         for text in watson_response['output']['text']:
             response += text + "\n"
+        # post to sns
+        if not state.conversation_started:
+            state.conversation_started = True
+            self.sns_client.post_start_message(state)
+        # return response
         return response
 
     def handle_favorites_message(self, state):
@@ -89,6 +95,9 @@ class SousChef(threading.Thread):
         for i, recipe in enumerate(state.conversation_context['recipes']):
             response += str(i + 1) + ". " + recipe['title'] + "\n"
         response += "\nPlease enter the corresponding number of your choice."
+        # post to sns
+        self.sns_client.post_favorites_message(state)
+        # return response
         return response
 
     def handle_ingredients_message(self, state, message):
@@ -115,6 +124,9 @@ class SousChef(threading.Thread):
         for i, recipe in enumerate(state.conversation_context['recipes']):
             response += str(i + 1) + ". " + recipe['title'] + "\n"
         response += "\nPlease enter the corresponding number of your choice."
+        # post to sns
+        self.sns_client.post_ingredient_message(state, ingredients_str)
+        # return response
         return response
 
     def handle_cuisine_message(self, state, message):
@@ -141,6 +153,9 @@ class SousChef(threading.Thread):
         for i, recipe in enumerate(state.conversation_context['recipes']):
             response += str(i + 1) + ". " + recipe['title'] + "\n"
         response += "\nPlease enter the corresponding number of your choice."
+        # post to sns
+        self.sns_client.post_cuisine_message(state, cuisine_str)
+        # return response
         return response
 
     def handle_selection_message(self, state, selection):
@@ -153,6 +168,7 @@ class SousChef(threading.Thread):
             if recipe is not None:
                 print "Recipe exists for {}. Returning recipe steps from datastore.".format(recipe_id)
                 recipe_detail = recipe.get_property_value('detail')
+                recipe_title = recipe.get_property_value('title')
                 # increment the count on the ingredient/cuisine-recipe and the user-recipe
                 self.recipe_store.record_recipe_request_for_user(recipe, state.ingredient_cuisine, state.user)
             else:
@@ -160,18 +176,23 @@ class SousChef(threading.Thread):
                 recipe_info = self.recipe_client.get_info_by_id(recipe_id)
                 recipe_steps = self.recipe_client.get_steps_by_id(recipe_id)
                 recipe_detail = self.make_formatted_steps(recipe_info, recipe_steps);
+                recipe_title = recipe_info['title']
                 # add recipe to datastore
-                self.recipe_store.add_recipe(recipe_id, recipe_info['title'], recipe_detail, state.ingredient_cuisine, state.user)
+                self.recipe_store.add_recipe(recipe_id, recipe_title, recipe_detail, state.ingredient_cuisine, state.user)
+            # post to sns
+            self.sns_client.post_recipe_message(state, recipe_id, recipe_title)
             # clear out state
             state.ingredient_cuisine = None
             state.conversation_context = None
+            state.conversation_started = False
             # return response
             return recipe_detail
         else:
             state.conversation_context['selection_valid'] = False
             return "Invalid selection! Say anything to see your choices again...";
 
-    def make_formatted_steps(self, recipe_info, recipe_steps):
+    @staticmethod
+    def make_formatted_steps(recipe_info, recipe_steps):
         response = "Ok, it takes *" + \
                    str(recipe_info['readyInMinutes']) + \
                    "* minutes to make *" + \

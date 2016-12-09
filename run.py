@@ -8,6 +8,7 @@ from watson_developer_cloud import ConversationV1
 
 from souschef.graph_recipe_store import GraphRecipeStore
 from souschef.recipe import RecipeClient
+from souschef.sns_client import SNSClient
 from souschef.souschef import SousChef
 
 if __name__ == "__main__":
@@ -30,13 +31,18 @@ if __name__ == "__main__":
                 os.environ.get("GRAPH_PASSWORD")
             )
         )
+        sns_client = SNSClient(
+            os.environ.get("SNS_API_URL"),
+            os.environ.get("SNS_API_KEY")
+        )
         # start the souschef bot
         souschef = SousChef(slack_bot_id,
                             slack_client,
                             conversation_client,
                             conversation_workspace_id,
                             recipe_client,
-                            recipe_store)
+                            recipe_store,
+                            sns_client)
         souschef.start()
         sys.stdin.readline()
     except (KeyboardInterrupt, SystemExit):
