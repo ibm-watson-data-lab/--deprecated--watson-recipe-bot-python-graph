@@ -4,15 +4,15 @@ This project is based on the [Watson Recipe Bot example](https://medium.com/ibm-
 The Watson Recipe Bot is a Slack bot that recommends recipes based on ingredients or cuisines.
 This project is essentially a fork of the Watson Recipe Bot with some additional features, including:
 
-1. Multi-user support - the original application supported only a single user interacting with the bot at a time. This application support multiple users interacting with the bot at the same time.
-2. Deploy to Bluemix - the original application was designed to be run locally. This application can be run locally, or deployed as a web application to Bluemix.
-2. IBM Graph integration - this application adds Graph integration for caching 3rd party API calls and storing each user's chat history (the ingredients, cuisines, and recipes they have selected).
+1. Multi-user support - the original application supported only a single user interacting with the bot at a time. This application supports multiple users interacting with the bot at the same time.
+2. IBM Graph integration - this application adds IBM Graph integration for caching 3rd party API calls and storing each user's chat history (the ingredients, cuisines, and recipes they have selected).
 3. Additional Watson Conversation intent - this application adds a "favorites" intent which allows a user to request their favorite recipes based on the history stored in Graph.
 
 ## Getting Started
 
 Before you get started [read the original blog post](https://medium.com/ibm-watson-developer-cloud/how-to-build-a-recipe-slack-bot-using-watson-conversation-and-spoonacular-api-487eacaf01d4#.i0q8fnhuu)
-to understand how the Watson Recipe Bot works. You __do not__ need to follow the instructions in the blog post. All the instructions required to run the bot are below.
+to understand how the Watson Recipe Bot works, or [the new blog post](https://medium.com/ibm-watson-data-lab/persisting-data-for-a-smarter-chatbot-be599480f7b2) which talks about improving the bot by adding persistence with IBM Cloudant.
+You __do not__ need to follow the instructions in these blog posts. All the instructions required to run the bot are below.
 After cloning this repo follow the steps below.
 
 ### Quick Reference
@@ -310,10 +310,6 @@ In this case the user has selected a single cuisine and a single recipe:
 
 You can find more information about IBM Graph and the Gremlin query language [here](https://ibm-graph-docs.ng.bluemix.net/).
  
-### Deploy to Bluemix
-
-Instructions coming soon!
-
 ### Sample Conversations
 
 Here are some sample conversations you can have with sous-chef:
@@ -327,7 +323,7 @@ Here are some sample conversations you can have with sous-chef:
 ## Next Steps
 
 For more information on how the sous-chef bot works [read the original blog post](https://medium.com/ibm-watson-developer-cloud/how-to-build-a-recipe-slack-bot-using-watson-conversation-and-spoonacular-api-487eacaf01d4#.i0q8fnhuu)
-and [the new blog post](https://medium.com/ibm-watson-data-lab/persisting-data-for-a-smarter-chatbot-be599480f7b2?source=collection_home---6------2---------) which talks about improving the bot by adding persistence with IBM Cloudant. 
+and [the new blog post](https://medium.com/ibm-watson-data-lab/persisting-data-for-a-smarter-chatbot-be599480f7b2) which talks about improving the bot by adding persistence with IBM Cloudant. 
 
 ## License
 
