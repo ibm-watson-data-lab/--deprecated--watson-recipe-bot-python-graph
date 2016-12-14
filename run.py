@@ -29,7 +29,8 @@ if __name__ == "__main__":
                 os.environ.get("GRAPH_API_URL"),
                 os.environ.get("GRAPH_USERNAME"),
                 os.environ.get("GRAPH_PASSWORD")
-            )
+            ),
+            os.environ.get("GRAPH_ID")
         )
         sns_client = SNSClient(
             os.environ.get("SNS_API_URL"),
