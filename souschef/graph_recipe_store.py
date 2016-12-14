@@ -32,7 +32,7 @@ class GraphRecipeStore(object):
             print 'Creating graph {}...'.format(self.graph_id)
             self.graph_client.create_graph(self.graph_id)
         # set graph
-        self.graph_client.set_graph(self.graph_name)
+        self.graph_client.set_graph(self.graph_id)
         # create schema if not exists
         print 'Getting graph schema...'
         schema = self.graph_client.get_schema()
