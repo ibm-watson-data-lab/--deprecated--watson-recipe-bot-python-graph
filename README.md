@@ -9,10 +9,6 @@ This project is essentially a fork of the Watson Recipe Bot with some additional
 2. IBM Graph integration - this application adds Graph integration for caching 3rd party API calls and storing each user's chat history (the ingredients, cuisines, and recipes they have selected).
 3. Additional Watson Conversation intent - this application adds a "favorites" intent which allows a user to request their favorite recipes based on the history stored in Graph.
 
-####Prefer Node.js?
-
-There is a Node.js version of this project [here](https://github.com/ibm-cds-labs/watson-recipe-bot-nodejs-graph).
-
 ## Getting Started
 
 Before you get started [read the original blog post](https://medium.com/ibm-watson-developer-cloud/how-to-build-a-recipe-slack-bot-using-watson-conversation-and-spoonacular-api-487eacaf01d4#.i0q8fnhuu)
@@ -273,8 +269,10 @@ python run.py
 If all is well you should see output similar to the following:
 
 ```
-Getting database...
-Creating database watson_recipe_bot...
+Getting graphs...
+Creating graph watson_recipe_bot...
+Getting graph schema...
+Creating graph schema...
 sous-chef is connected and running!
 ```
 
@@ -283,39 +281,40 @@ sous-chef, and say "hi".
 
 ![sous-chef](screenshots/local1.png?rev=2&raw=true)
 
+### IBM Graph Dashboard Quick Start
+
+To learn more about IBM Graph and how the Watson Recipe Bot uses IBM Graph to store users, ingredients, cuisines, and recipes
+launch the IBM Graph dashboard from Bluemix by clicking the **Open** button on the IBM Graph Service Details page.
+Select the watson-recipe-bot graph:
+
+![IBM Graph](screenshots/ibmgraph-dashboard1.png?rev=1&raw=true)
+
+Once you have interacted with the Slack bot a Vertex for your Slack user should have been stored in Graph.
+You can find your Slack ID in `python run.py` output. Look for the following:
+ 
+```
+Creating person vertex where name=UXXXXXXXX
+```
+
+Run the following Gremlin query in the IBM Dashboard. Replace UXXXXXXXX with your Slack ID:
+
+```
+def g = graph.traversal();
+g.V().hasLabel("person").has("name","UXXXXXXXX").outE().inV().outE().inV().path();
+```
+
+The screenshot below shows a sample of what you might see in the IBM Graph Dashboard.
+In this case the user has selected a single cuisine and a single recipe:
+
+![IBM Graph](screenshots/ibmgraph-dashboard2.png?rev=1&raw=true)
+
+You can find more information about IBM Graph and the Gremlin query language [here](https://ibm-graph-docs.ng.bluemix.net/).
+ 
 ### Deploy to Bluemix
 
-You can deploy the application to Bluemix by following a few simple steps.
+Instructions coming soon!
 
-We will be using the `cf push` command to deploy the application to Bluemix from our local environment. 
-If you have not yet installed the Bluemix CLI and Dev Tools [click here](https://console.ng.bluemix.net/docs/starters/install_cli.html)
-for instructions on how to download and configure the CLI tools.  
-
-Once you have the CLI tools run the following command (make sure you are in the watson-recipe-bot-python-graph directory):
-
-```
-cf push
-```
-
-It will take a few minutes for the application to be uploaded and created in Bluemix.
-The first time you deploy the application it will fail to start.
-This is because we need to add our environment variables to the application in Bluemix.
-
-1. After a few minutes has passed and your `cf push` command has completed log in to Bluemix.
-2. Find and click the **watson-recipe-bot-graph** application under **Cloud Foundry Applications** in your Apps Dashboard.
-3. On the application page click **Runtime** in the menu on the left then click **Environment Variables**:
-
-    ![Cloud Foundry Application](screenshots/cfapp1.png?rev=1&raw=true)
-
-4. Add each environment variable from your .env file and click the **Save** button:
-
-    ![Cloud Foundry Application](screenshots/cfapp2.png?rev=1&raw=true)
-    
-5. Your app will automatically restart, but it may fail again. Wait for a minute or two and restart your app again.
-
-To verify that your bot is running open Slack and start a direct conversation with sous-chef. Slack should show that sous-chef is active:
-
-![sous-chef](screenshots/sous-chef1.png?rev=1&raw=true)
+### Sample Conversations
 
 Here are some sample conversations you can have with sous-chef:
 
@@ -327,27 +326,8 @@ Here are some sample conversations you can have with sous-chef:
 
 ## Next Steps
 
-For more information on how the sous-chef bot works [read the original blog post](https://medium.com/ibm-watson-developer-cloud/how-to-build-a-recipe-slack-bot-using-watson-conversation-and-spoonacular-api-487eacaf01d4#.i0q8fnhuu).
-
-We will be publishing a new blog post soon that will discuss the enhancements we have made to the original application, including
-how we are using Graph to store chat history and enable the new "favorites" intent.
-
-## Privacy Notice
-
-This application includes code to track deployments to [IBM Bluemix](https://www.bluemix.net/) and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/cloudant-labs/deployment-tracker) service on each deployment:
-
-* Application Name (`application_name`)
-* Space ID (`space_id`)
-* Application Version (`application_version`)
-* Application URIs (`application_uris`)
-
-This data is collected from the `VCAP_APPLICATION` environment variable in IBM Bluemix and other Cloud Foundry platforms. This data is used by IBM to track metrics around deployments of sample applications to IBM Bluemix to measure the usefulness of our examples, so that we can continuously improve the content we offer to you. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
-
-### Disabling Deployment Tracking
-
-Deployment tracking can be disabled by removing or commenting out the following line in `server.py`:
-
-`deployment_tracker.track()`
+For more information on how the sous-chef bot works [read the original blog post](https://medium.com/ibm-watson-developer-cloud/how-to-build-a-recipe-slack-bot-using-watson-conversation-and-spoonacular-api-487eacaf01d4#.i0q8fnhuu)
+and [the new blog post](https://medium.com/ibm-watson-data-lab/persisting-data-for-a-smarter-chatbot-be599480f7b2?source=collection_home---6------2---------) which talks about improving the bot by adding persistence with IBM Cloudant. 
 
 ## License
 
