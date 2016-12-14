@@ -1,21 +1,34 @@
 import httplib
 import json
 
+from Queue import Queue
+from threading import Thread
+
 
 class SNSClient(object):
 
     def __init__(self, api_url, api_key):
-        self.api_url = api_url
-        self.api_key = api_key
-        url = self.api_url
-        index = self.api_url.find('://')
-        if index > 0:
-            url = self.api_url[self.api_url.find('://')+3:]
-        index = url.find('/')
-        if index > 0:
-            self.base_url = url[0:index]
+        if api_url is None:
+            self.enabled = False
         else:
-            self.base_url = url
+            self.enabled = True
+            self.api_url = api_url
+            self.api_key = api_key
+            url = self.api_url
+            index = self.api_url.find('://')
+            if index > 0:
+                url = self.api_url[self.api_url.find('://')+3:]
+            index = url.find('/')
+            if index > 0:
+                self.base_url = url[0:index]
+            else:
+                self.base_url = url
+            self.queue_thread_count = 10
+            self.queue = Queue(self.queue_thread_count)
+            for i in range(self.queue_thread_count):
+                worker = Thread(target=self.do_http_post_from_queue)
+                worker.setDaemon(True)
+                worker.start()
 
     def post_start_message(self, state):
         self.post_message('start', state, '{} started a new conversation.'.format(state.user_id))
@@ -33,7 +46,9 @@ class SNSClient(object):
         self.post_message('ingredient', state, '{} selected recipe \'{}\'.'.format(state.user_id, recipe_title), recipe_id)
 
     def post_message(self, action, state, message, recipe_id=None):
-        path = '/notification'
+        # if sns not enabled then return
+        if not self.enabled:
+            return
         ingredient = None
         cuisine = None
         if state.ingredient_cuisine is not None:
@@ -42,8 +57,10 @@ class SNSClient(object):
             else:
                 cuisine = state.ingredient_cuisine.get_property_value('name')
         body = json.dumps({
+            'userQuery': {
+                'type': 'action'
+            },
             'notification': {
-                'type': 'action',
                 'action': action,
                 'message': message,
                 'state': {
@@ -54,7 +71,13 @@ class SNSClient(object):
                 }
             }
         })
-        self.do_http_post(path, body)
+        self.queue.put(body)
+
+    def do_http_post_from_queue(self):
+        while True:
+            body = self.queue.get()
+            self.do_http_post('/notification', body)
+            self.queue.task_done()
 
     def do_http_post(self, path, body=''):
         return self.do_http_post_url('/{}{}'.format(self.api_key, path), body)

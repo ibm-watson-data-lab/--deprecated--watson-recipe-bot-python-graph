@@ -11,7 +11,7 @@ from ibm_graph.schema import VertexLabel
 
 class GraphRecipeStore(object):
 
-    def __init__(self, graph_client):
+    def __init__(self, graph_client, graph_id):
         """
         Creates a new instance of GraphRecipeStore.
         Parameters
@@ -19,16 +19,26 @@ class GraphRecipeStore(object):
         graph_client - The instance of the IBM Graph client to use
         """
         self.graph_client = graph_client
+        self.graph_id = graph_id
 
     def init(self):
         """
-        Creates and initializes the Graph schema.
+        Creates and initializes the Graph and Graph schema.
         """
-        print 'Getting Graph Schema...'
+        print 'Getting graphs...'
+        graph_ids = self.graph_client.get_graphs()
+        graph_exists = (self.graph_id in graph_ids)
+        if not graph_exists:
+            print 'Creating graph {}...'.format(self.graph_id)
+            self.graph_client.create_graph(self.graph_id)
+        # set graph
+        self.graph_client.set_graph(self.graph_name)
+        # create schema if not exists
+        print 'Getting graph schema...'
         schema = self.graph_client.get_schema()
         schema_exists = (schema is not None and schema.property_keys is not None and len(schema.property_keys) > 0)
         if not schema_exists:
-            print 'Creating Graph Schema...'
+            print 'Creating graph schema...'
             schema = Schema([
                     PropertyKey('name', 'String', 'SINGLE'),
                     PropertyKey('title', 'String', 'SINGLE'),
