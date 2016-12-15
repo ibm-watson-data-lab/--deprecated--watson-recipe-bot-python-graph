@@ -17,7 +17,7 @@ class SNSClient(object):
             url = self.api_url
             index = self.api_url.find('://')
             if index > 0:
-                url = self.api_url[self.api_url.find('://')+3:]
+                url = self.api_url[index+3:]
             index = url.find('/')
             if index > 0:
                 self.base_url = url[0:index]
