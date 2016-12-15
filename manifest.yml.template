@@ -1,0 +1,8 @@
+applications:
+- path: .
+  memory: 128M
+  instances: 1
+  domain: mybluemix.net
+  name: watson-recipe-bot-graph
+  host: watson-recipe-bot-graph-${random-word}
+  disk_quota: 1024M
