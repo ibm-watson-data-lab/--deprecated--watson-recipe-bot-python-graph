@@ -17,6 +17,7 @@ class GraphRecipeStore(object):
         Parameters
         ----------
         graph_client - The instance of the IBM Graph client to use
+        graph_id - The id of the graph to use
         """
         self.graph_client = graph_client
         self.graph_id = graph_id
