@@ -212,14 +212,11 @@ class GraphRecipeStore(object):
         user_vertex - The existing Graph vertex for the user
         count - The max number of recipes to return
         """
-        query = 'g.V().hasLabel("person").has("name", "{}").outE().inV().hasLabel("recipe").path()'.format(user_vertex.get_property_value('name'))
+        query = 'g.V().hasLabel("person").has("name", "{}").outE().order().by("count", decr).inV().hasLabel("recipe").limit({}).path()'.format(user_vertex.get_property_value('name'), count)
         paths = self.graph_client.run_gremlin_query(query)
         if len(paths) > 0:
-            paths.sort(key=lambda x: x.objects[1].get_property_value('count'), reverse=True)
             recipes = []
-            for i, path in enumerate(paths):
-                if i >= count:
-                    break
+            for path in enumerate(paths):
                 recipes.append({
                     'id': path.objects[2].get_property_value('name'),
                     'title': path.objects[2].get_property_value('title')

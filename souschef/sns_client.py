@@ -1,5 +1,6 @@
 import httplib
 import json
+import sys
 
 from Queue import Queue
 from threading import Thread
@@ -75,8 +76,11 @@ class SNSClient(object):
 
     def do_http_post_from_queue(self):
         while True:
-            body = self.queue.get()
-            self.do_http_post('/notification', body)
+            try:
+                body = self.queue.get()
+                self.do_http_post('/notification', body)
+            except Exception:
+                print sys.exc_info()
             self.queue.task_done()
 
     def do_http_post(self, path, body=''):
