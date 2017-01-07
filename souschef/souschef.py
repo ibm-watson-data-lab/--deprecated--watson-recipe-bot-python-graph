@@ -23,6 +23,8 @@ class SousChef(threading.Thread):
         self.delay = 0.5  # second
         self.user_state_map = {}
         self.pp = pprint.PrettyPrinter(indent=4)
+        # constants
+        self.MAX_RECIPES = 5
 
     def parse_slack_output(self, slack_rtm_output):
         output_list = slack_rtm_output
@@ -88,7 +90,7 @@ class SousChef(threading.Thread):
         return response
 
     def handle_favorites_message(self, state):
-        recipes = self.recipe_store.find_favorite_recipes_for_user(state.user, 5)
+        recipes = self.recipe_store.find_favorite_recipes_for_user(state.user, self.MAX_RECIPES)
         # update state
         state.conversation_context['recipes'] = recipes
         state.ingredient_cuisine = None
@@ -108,19 +110,19 @@ class SousChef(threading.Thread):
             matching_recipes = []
             recipe_ids = []
             # get recommended recipes first
-            recommended_recipes = self.recipe_store.find_recommended_recipes_for_ingredient(ingredients_str, state.user, 5);
+            recommended_recipes = self.recipe_store.find_recommended_recipes_for_ingredient(ingredients_str, state.user, self.MAX_RECIPES);
             for recipe in recommended_recipes:
                 recipe['recommended'] = True
                 recipe_ids.append(recipe['id'])
                 matching_recipes.append(recipe)
-            if len(matching_recipes) < 5:
+            if len(matching_recipes) < self.MAX_RECIPES:
                 recipes = json.loads(ingredient.get_property_value('detail'))
                 for recipe in recipes:
                     recipe_id = str(recipe['id'])
                     if recipe_id not in recipe_ids:
                         recipe_ids.append(recipe_id)
                         matching_recipes.append(recipe)
-                        if len(matching_recipes) >= 5:
+                        if len(matching_recipes) >= self.MAX_RECIPES:
                             break
             # increment the count on the user-ingredient
             self.recipe_store.record_ingredient_request_for_user(ingredient, state.user)
@@ -149,19 +151,19 @@ class SousChef(threading.Thread):
             matching_recipes = []
             recipe_ids = []
             # get recommended recipes first
-            recommended_recipes = self.recipe_store.find_recommended_recipes_for_cuisine(cuisine_str, state.user, 5);
+            recommended_recipes = self.recipe_store.find_recommended_recipes_for_cuisine(cuisine_str, state.user, self.MAX_RECIPES);
             for recipe in recommended_recipes:
                 recipe['recommended'] = True
                 recipe_ids.append(recipe['id'])
                 matching_recipes.append(recipe)
-            if len(matching_recipes) < 5:
+            if len(matching_recipes) < self.MAX_RECIPES:
                 recipes = json.loads(cuisine.get_property_value('detail'))
                 for recipe in recipes:
                     recipe_id = str(recipe['id'])
                     if recipe_id not in recipe_ids:
                         recipe_ids.append(recipe_id)
                         matching_recipes.append(recipe)
-                        if len(matching_recipes) >= 5:
+                        if len(matching_recipes) >= self.MAX_RECIPES:
                             break
             # increment the count on the user-cuisine
             self.recipe_store.record_cuisine_request_for_user(cuisine, state.user)
@@ -183,7 +185,7 @@ class SousChef(threading.Thread):
         selection = -1
         if state.conversation_context['selection'].isdigit():
             selection = int(state.conversation_context['selection'])
-        if 1 <= selection <= 5:
+        if 1 <= selection <= self.MAX_RECIPES:
             # we want to get a the recipe based on the selection
             # first we see if we already have the recipe in our datastore
             recipes = state.conversation_context['recipes']
