@@ -104,7 +104,24 @@ class SousChef(threading.Thread):
         ingredient = self.recipe_store.find_ingredient(ingredients_str)
         if ingredient is not None:
             print "Ingredient exists for {}. Returning recipes from datastore.".format(ingredients_str)
-            matching_recipes = json.loads(ingredient.get_property_value('detail'))
+            # get recipes from datastore
+            matching_recipes = []
+            recipe_ids = []
+            # get recommended recipes first
+            recommended_recipes = self.recipe_store.find_recommended_recipes_for_ingredient(ingredients_str, state.user, 5);
+            for recipe in recommended_recipes:
+                recipe['recommended'] = True
+                recipe_ids.append(recipe['id'])
+                matching_recipes.append(recipe)
+            if len(matching_recipes) < 5:
+                recipes = json.loads(ingredient.get_property_value('detail'))
+                for recipe in recipes:
+                    recipe_id = str(recipe['id'])
+                    if recipe_id not in recipe_ids:
+                        recipe_ids.append(recipe_id)
+                        matching_recipes.append(recipe)
+                        if len(matching_recipes) >= 5:
+                            break
             # increment the count on the user-ingredient
             self.recipe_store.record_ingredient_request_for_user(ingredient, state.user)
         else:
@@ -128,7 +145,24 @@ class SousChef(threading.Thread):
         cuisine = self.recipe_store.find_cuisine(cuisine_str)
         if cuisine is not None:
             print "Cuisine exists for {}. Returning recipes from datastore.".format(cuisine_str)
-            matching_recipes = json.loads(cuisine.get_property_value('detail'))
+            # get recipes from datastore
+            matching_recipes = []
+            recipe_ids = []
+            # get recommended recipes first
+            recommended_recipes = self.recipe_store.find_recommended_recipes_for_cuisine(cuisine_str, state.user, 5);
+            for recipe in recommended_recipes:
+                recipe['recommended'] = True
+                recipe_ids.append(recipe['id'])
+                matching_recipes.append(recipe)
+            if len(matching_recipes) < 5:
+                recipes = json.loads(cuisine.get_property_value('detail'))
+                for recipe in recipes:
+                    recipe_id = str(recipe['id'])
+                    if recipe_id not in recipe_ids:
+                        recipe_ids.append(recipe_id)
+                        matching_recipes.append(recipe)
+                        if len(matching_recipes) >= 5:
+                            break
             # increment the count on the user-cuisine
             self.recipe_store.record_cuisine_request_for_user(cuisine, state.user)
         else:
@@ -188,7 +222,13 @@ class SousChef(threading.Thread):
     def get_recipe_list_response(state):
         response = "Lets see here...\nI've found these recipes:\n"
         for i, recipe in enumerate(state.conversation_context['recipes']):
-            response += str(i + 1) + ". " + recipe['title'] + "\n"
+            response += str(i + 1) + ". " + recipe['title']
+            if 'recommended' in recipe.keys():
+                users = recipe['recommendedUserCount']
+                s1 = '' if users == 1 else 's'
+                s2 = 's' if users == 1 else ''
+                response += ' *({} other user{} like{} this)'.format(users,s1,s2)
+            response += '\n'
         response += "\nPlease enter the corresponding number of your choice."
         return response
 

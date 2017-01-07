@@ -204,27 +204,6 @@ class GraphRecipeStore(object):
         """
         return self.find_vertex('recipe', 'name', self.get_unique_recipe_name(recipe_id))
 
-    def find_favorite_recipes_for_user(self, user_vertex, count):
-        """
-        Finds the user's favorite recipes in Graph.
-        Parameters
-        ----------
-        user_vertex - The existing Graph vertex for the user
-        count - The max number of recipes to return
-        """
-        query = 'g.V().hasLabel("person").has("name", "{}").outE().order().by("count", decr).inV().hasLabel("recipe").limit({}).path()'.format(user_vertex.get_property_value('name'), count)
-        paths = self.graph_client.run_gremlin_query(query)
-        if len(paths) > 0:
-            recipes = []
-            for path in enumerate(paths):
-                recipes.append({
-                    'id': path.objects[2].get_property_value('name'),
-                    'title': path.objects[2].get_property_value('title')
-                })
-            return recipes
-        else:
-            return []
-
     def add_recipe(self, recipe_id, recipe_title, recipe_detail, ingredient_cuisine_vertex, user_vertex):
         """
         Adds a new recipe to Graph if a recipe with the specified name does not already exist.
@@ -244,6 +223,82 @@ class GraphRecipeStore(object):
         recipe_vertex = self.add_vertex_if_not_exists(recipe_vertex, 'name')
         self.record_recipe_request_for_user(recipe_vertex, ingredient_cuisine_vertex, user_vertex)
         return recipe_vertex
+
+    def find_favorite_recipes_for_user(self, user_vertex, count):
+        """
+        Finds the user's favorite recipes in Graph.
+        Parameters
+        ----------
+        user_vertex - The existing Graph vertex for the user
+        count - The max number of recipes to return
+        """
+        query = 'g.V().hasLabel("person").has("name", "{}").outE().order().by("count", decr).inV().hasLabel("recipe").limit({})'.format(user_vertex.get_property_value('name'), count)
+        recipe_vertices = self.graph_client.run_gremlin_query(query)
+        if len(recipe_vertices) > 0:
+            recipes = []
+            for recipe_vertex in recipe_vertices:
+                recipes.append({
+                    'id': recipe_vertex.get_property_value('name'),
+                    'title': recipe_vertex.get_property_value('title')
+                })
+            return recipes
+        else:
+            return []
+
+    def find_recommended_recipes_for_ingredient(self, ingredients_str, user_vertex, count):
+        """
+        Finds popular recipes using the specified ingredient.
+        Parameters
+        ----------
+        ingredients_str - The ingredient or comma-separated list of ingredients specified by the user
+        user_vertex - The Graph vertex for the user requesting recommended recipes
+        count - The max number of recipes to return
+        """
+        ingredients_str = self.get_unique_ingredients_name(ingredients_str)
+        query = 'g.V().hasLabel("ingredient").has("name","{}")'.format(ingredients_str)
+        query += '.inE().outV().hasLabel("person").has("name",neq("{}"))'.format(user_vertex.get_property_value('name'))
+        query += '.outE().has("count",gt(1)).order().by("count", decr).inV().hasLabel("recipe")'
+        query += '.inE().outV().hasLabel("ingredient").has("name","{}").path()'.format(ingredients_str)
+        return self.get_recommended_recipes(query, count)
+
+    def find_recommended_recipes_for_cuisine(self, cuisine, user_vertex, count):
+        """
+        Finds popular recipes using the specified cuisine.
+        Parameters
+        ----------
+        cuisine - The cuisine specified by the user
+        user_vertex - The Graph vertex for the user requesting recommended recipes
+        count - The max number of recipes to return
+        """
+        cuisine = self.get_unique_cuisine_name(cuisine)
+        query = 'g.V().hasLabel("cuisine").has("name","{}")'.format(cuisine)
+        query += '.inE().outV().hasLabel("person").has("name",neq("{}"))'.format(user_vertex.get_property_value('name'))
+        query += '.outE().has("count",gt(1)).order().by("count", decr).inV().hasLabel("recipe")'
+        query += '.inE().outV().hasLabel("cuisine").has("name","{}").path()'.format(cuisine)
+        return self.get_recommended_recipes(query, count)
+
+    def get_recommended_recipes(self, query, count):
+        paths = self.graph_client.run_gremlin_query(query)
+        if len(paths) > 0:
+            recipes = []
+            for path in paths:
+                recipe_vertex = path.objects[4]
+                recipe_id = recipe_vertex.get_property_value('name')
+                existing_recipes = filter(lambda x: x['id'] == recipe_id, recipes)
+                if len(existing_recipes) == 0:
+                    if len(recipes) >= count:
+                        continue
+                    else:
+                        recipes.append({
+                            'id': recipe_id,
+                            'title': recipe_vertex.get_property_value('title'),
+                            'recommendedUserCount': 1
+                        })
+                else:
+                    existing_recipes[0]['recommendedUserCount'] += 1
+            return recipes
+        else:
+            return []
 
     def record_recipe_request_for_user(self, recipe_vertex, ingredient_cuisine_vertex, user_vertex):
         """
