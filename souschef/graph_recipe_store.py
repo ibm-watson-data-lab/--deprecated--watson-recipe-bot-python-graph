@@ -256,9 +256,10 @@ class GraphRecipeStore(object):
         """
         ingredients_str = self.get_unique_ingredients_name(ingredients_str)
         query = 'g.V().hasLabel("ingredient").has("name","{}")'.format(ingredients_str)
-        query += '.inE().outV().hasLabel("person").has("name",neq("{}"))'.format(user_vertex.get_property_value('name'))
-        query += '.outE().has("count",gt(1)).order().by("count", decr).inV().hasLabel("recipe")'
-        query += '.inE().outV().hasLabel("ingredient").has("name","{}").path()'.format(ingredients_str)
+        query += '.in("has")'
+        query += '.inE().has("count",gt(1)).order().by("count", decr)'
+        query += '.outV().hasLabel("person").has("name",neq("{}"))'.format(user_vertex.get_property_value('name'))
+        query += '.path()'
         return self.get_recommended_recipes(query, count)
 
     def find_recommended_recipes_for_cuisine(self, cuisine, user_vertex, count):
@@ -272,9 +273,10 @@ class GraphRecipeStore(object):
         """
         cuisine = self.get_unique_cuisine_name(cuisine)
         query = 'g.V().hasLabel("cuisine").has("name","{}")'.format(cuisine)
-        query += '.inE().outV().hasLabel("person").has("name",neq("{}"))'.format(user_vertex.get_property_value('name'))
-        query += '.outE().has("count",gt(1)).order().by("count", decr).inV().hasLabel("recipe")'
-        query += '.inE().outV().hasLabel("cuisine").has("name","{}").path()'.format(cuisine)
+        query += '.in("has")'
+        query += '.inE().has("count",gt(1)).order().by("count", decr)'
+        query += '.outV().hasLabel("person").has("name",neq("{}"))'.format(user_vertex.get_property_value('name'))
+        query += '.path()'
         return self.get_recommended_recipes(query, count)
 
     def get_recommended_recipes(self, query, count):
@@ -282,7 +284,7 @@ class GraphRecipeStore(object):
         if len(paths) > 0:
             recipes = []
             for path in paths:
-                recipe_vertex = path.objects[4]
+                recipe_vertex = path.objects[1]
                 recipe_id = recipe_vertex.get_property_value('name')
                 existing_recipes = filter(lambda x: x['id'] == recipe_id, recipes)
                 if len(existing_recipes) == 0:
@@ -318,10 +320,14 @@ class GraphRecipeStore(object):
         })
         self.add_update_edge(edge)
         if ingredient_cuisine_vertex is not None:
+            # add "selects" edge from ingredient/cuisine to recipe
             edge = Edge('selects', ingredient_cuisine_vertex.id, recipe_vertex.id, {
                 'count': 1
             })
             self.add_update_edge(edge)
+            # add "has" edge from recipe to ingredient/cuisine
+            edge = Edge('has', recipe_vertex.id, ingredient_cuisine_vertex.id)
+            self.add_edge_if_not_exists(edge)
 
     # Graph Helper Methods
 
@@ -359,6 +365,21 @@ class GraphRecipeStore(object):
             print 'Creating {} vertex where {}={}'.format(vertex.label, unique_property_name, property_value)
             return self.graph_client.add_vertex(vertex)
 
+    def add_edge_if_not_exists(self, edge):
+        """
+        Adds a new edge to Graph if an edge with the same out_v and in_v does not exist.
+        Parameters
+        ----------
+        edge - The edge to add
+        """
+        query = 'g.V({}).outE().inV().hasId({}).path()'.format(edge.out_v, edge.in_v)
+        response = self.graph_client.run_gremlin_query(query)
+        if len(response) > 0:
+            print 'Edge from {} to {} exists.'.format(edge.out_v, edge.in_v)
+        else:
+            print 'Creating edge from {} to {}'.format(edge.out_v, edge.in_v)
+            self.graph_client.add_edge(edge)
+
     def add_update_edge(self, edge):
         """
         Adds a new edge to Graph if an edge with the same out_v and in_v does not exist.
@@ -370,6 +391,7 @@ class GraphRecipeStore(object):
         query = 'g.V({}).outE().inV().hasId({}).path()'.format(edge.out_v, edge.in_v)
         response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
+            print 'Edge from {} to {} exists.'.format(edge.out_v, edge.in_v)
             edge = response[0].objects[1]
             edge_count = edge.get_property_value('count')
             count = 0
@@ -378,4 +400,5 @@ class GraphRecipeStore(object):
             edge.set_property_value('count', count+1)
             self.graph_client.update_edge(edge)
         else:
+            print 'Creating edge from {} to {}'.format(edge.out_v, edge.in_v)
             self.graph_client.add_edge(edge)
