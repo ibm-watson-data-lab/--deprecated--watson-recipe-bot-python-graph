@@ -26,20 +26,20 @@ class GraphRecipeStore(object):
         """
         Creates and initializes the Graph and Graph schema.
         """
-        print 'Getting graphs...'
+        print('Getting graphs...')
         graph_ids = self.graph_client.get_graphs()
         graph_exists = (self.graph_id in graph_ids)
         if not graph_exists:
-            print 'Creating graph {}...'.format(self.graph_id)
+            print('Creating graph {}...'.format(self.graph_id))
             self.graph_client.create_graph(self.graph_id)
         # set graph
         self.graph_client.set_graph(self.graph_id)
         # create schema if not exists
-        print 'Getting graph schema...'
+        print('Getting graph schema...')
         schema = self.graph_client.get_schema()
         schema_exists = (schema is not None and schema.property_keys is not None and len(schema.property_keys) > 0)
         if not schema_exists:
-            print 'Creating graph schema...'
+            print('Creating graph schema...')
             schema = Schema([
                     PropertyKey('name', 'String', 'SINGLE'),
                     PropertyKey('title', 'String', 'SINGLE'),
@@ -61,7 +61,7 @@ class GraphRecipeStore(object):
             )
             self.graph_client.save_schema(schema)
         else:
-            print 'Graph Schema exists.'
+            print('Graph Schema exists.')
 
     # User
 
@@ -359,10 +359,10 @@ class GraphRecipeStore(object):
         query = 'g.V().hasLabel("{}").has("{}", "{}")'.format(vertex.label, unique_property_name, property_value)
         response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
-            print 'Returning {} vertex where {}={}'.format(vertex.label, unique_property_name, property_value)
+            print('Returning {} vertex where {}={}'.format(vertex.label, unique_property_name, property_value))
             return response[0]
         else:
-            print 'Creating {} vertex where {}={}'.format(vertex.label, unique_property_name, property_value)
+            print('Creating {} vertex where {}={}'.format(vertex.label, unique_property_name, property_value))
             return self.graph_client.add_vertex(vertex)
 
     def add_edge_if_not_exists(self, edge):
@@ -375,9 +375,9 @@ class GraphRecipeStore(object):
         query = 'g.V({}).outE().inV().hasId({}).path()'.format(edge.out_v, edge.in_v)
         response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
-            print 'Edge from {} to {} exists.'.format(edge.out_v, edge.in_v)
+            print('Edge from {} to {} exists.'.format(edge.out_v, edge.in_v))
         else:
-            print 'Creating edge from {} to {}'.format(edge.out_v, edge.in_v)
+            print('Creating edge from {} to {}'.format(edge.out_v, edge.in_v))
             self.graph_client.add_edge(edge)
 
     def add_update_edge(self, edge):
@@ -391,7 +391,7 @@ class GraphRecipeStore(object):
         query = 'g.V({}).outE().inV().hasId({}).path()'.format(edge.out_v, edge.in_v)
         response = self.graph_client.run_gremlin_query(query)
         if len(response) > 0:
-            print 'Edge from {} to {} exists.'.format(edge.out_v, edge.in_v)
+            print('Edge from {} to {} exists.'.format(edge.out_v, edge.in_v))
             edge = response[0].objects[1]
             edge_count = edge.get_property_value('count')
             count = 0
@@ -400,5 +400,5 @@ class GraphRecipeStore(object):
             edge.set_property_value('count', count+1)
             self.graph_client.update_edge(edge)
         else:
-            print 'Creating edge from {} to {}'.format(edge.out_v, edge.in_v)
+            print('Creating edge from {} to {}'.format(edge.out_v, edge.in_v))
             self.graph_client.add_edge(edge)

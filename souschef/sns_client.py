@@ -80,7 +80,7 @@ class SNSClient(object):
                 body = self.queue.get()
                 self.do_http_post('/notification', body)
             except Exception:
-                print sys.exc_info()
+                print(sys.exc_info())
             self.queue.task_done()
 
     def do_http_post(self, path, body=''):
