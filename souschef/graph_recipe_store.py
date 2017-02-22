@@ -286,7 +286,7 @@ class GraphRecipeStore(object):
             for path in paths:
                 recipe_vertex = path.objects[1]
                 recipe_id = recipe_vertex.get_property_value('name')
-                existing_recipes = filter(lambda x: x['id'] == recipe_id, recipes)
+                existing_recipes = list(filter(lambda x: x['id'] == recipe_id, recipes))
                 if len(existing_recipes) == 0:
                     if len(recipes) >= count:
                         continue
